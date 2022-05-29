@@ -15,9 +15,9 @@ const getContacts = () => {
 export const items = createReducer(getContacts, {
   [addContacts]: (state, action) => [...state, action.payload],
   [removeContacts]: (state, { payload }) =>
-    state.filter(el => el.payload !== payload),
+    state.filter(el => el.id !== payload),
 });
 
 export const filter = createReducer('', {
-  [addValueFilter]: (state, action) => state,
+  [addValueFilter]: (state, { payload }) => payload,
 });

@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Container from './container/container';
 import Form from './form/form';
 import ContactsList from './contactsList/contactsList';
 import Filter from './filterContacts/filter';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContacts, removeContacts } from './redux/contacts-action';
+import {
+  addContacts,
+  removeContacts,
+  addValueFilter,
+} from './redux/contacts-action';
 
 export default function App() {
-  // const [contacts, setContacts] = useState(getContacts);
-  const [filter, setFilter] = useState('');
   const contacts = useSelector(state => state.items);
+  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   window.localStorage.setItem(
-  //     'contactsList',
-  //     JSON.stringify(contacts),
-  //   );
-  // }, [contacts]);
+  useEffect(() => {
+    window.localStorage.setItem(
+      'contactsList',
+      JSON.stringify(contacts),
+    );
+  }, [contacts]);
 
   const addValidContacts = value => {
-    // const arrey = [...contacts, value];
     if (
       contacts.every(
         e => e.name.toLowerCase() !== value.name.toLowerCase(),
@@ -33,7 +35,7 @@ export default function App() {
   };
 
   const onInputFilter = value => {
-    setFilter(value.trim());
+    dispatch(addValueFilter(value.trim()));
   };
 
   const filterVisibleEl = () => {
@@ -42,12 +44,6 @@ export default function App() {
       el.name.toLowerCase().includes(filterLowCace),
     );
   };
-
-  // const removeContacts = id => {
-  //   setContacts(prevContats =>
-  //     prevContats.filter(el => el.id !== id),
-  //   );
-  // };
 
   return (
     <Container>
