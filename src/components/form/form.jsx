@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { BsFillArrowRightSquareFill } from 'react-icons/bs';
 import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContacts } from 'redux/contacts-action';
+
 import s from './form.module.css';
 
-export default function Form({ addValidContacts }) {
+export default function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(state => state.items);
+  const dispatch = useDispatch();
 
   const onSubmit = () => {
     addValidContacts({ name, number, id: nanoid(5) });
@@ -16,6 +21,18 @@ export default function Form({ addValidContacts }) {
   const removeState = () => {
     setName('');
     setNumber('');
+  };
+
+  const addValidContacts = value => {
+    if (
+      contacts.every(
+        e => e.name.toLowerCase() !== value.name.toLowerCase(),
+      )
+    ) {
+      dispatch(addContacts(value));
+    } else {
+      alert(`"${value.name}" is already in contact!`);
+    }
   };
 
   return (
@@ -61,5 +78,3 @@ export default function Form({ addValidContacts }) {
     </form>
   );
 }
-
-Form.propTypes = { addValidContacts: PropTypes.func.isRequired };
